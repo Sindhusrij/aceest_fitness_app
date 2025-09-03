@@ -1,0 +1,17 @@
+# Use Python base image
+FROM python:3.13-slim
+
+WORKDIR /app
+
+# Copy only requirements first (layer caching)
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install pytest
+
+# Copy everything
+COPY . .
+
+# Run tests by default
+CMD ["pytest", "--maxfail=1", "--disable-warnings", "-q"]
+
